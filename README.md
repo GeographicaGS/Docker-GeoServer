@@ -57,3 +57,14 @@ TODO
 Create another Docker with the JVM installed separately, and with JMX installed.
 
 Externalize the webapps folder to a volume on the host.
+
+
+
+
+
+docker run --rm -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -e "MEM=512m" -e "MMEM=512m" -e "PMEM=2048k" -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data test6:latest
+
+
+
+
+docker build -t="geographica/geoserver:v2.6.2
