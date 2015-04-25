@@ -7,8 +7,6 @@ The following:
 
 - an Oracle Java Virtual Machine Server JDK, installed not from packages, but from the binaries provided by Oracle;
 
-- binary Apache Ant;
-
 - Apache Tomcat as provided by the Apache Foundation (not from packages);
 
 - the Apache Portable Runtime, compiled from source, and enabled into Tomcat.
