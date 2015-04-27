@@ -1,5 +1,5 @@
-Docker Image for Oracle JVM & Apache Tomcat
-===========================================
+Docker Image for GeoServer
+==========================
 
 What does this Docker image contains?
 -------------------------------------
@@ -9,7 +9,9 @@ The following:
 
 - Apache Tomcat as provided by the Apache Foundation (not from packages);
 
-- the Apache Portable Runtime, compiled from source, and enabled into Tomcat.
+- the Apache Portable Runtime, compiled from source, and enabled into Tomcat;
+
+- GeoServer, deployed in Tomcat from the war file.
 
 Check _Tags_ for version info.
 
@@ -18,51 +20,41 @@ Tags
 ----
 Different versions may be available in the future. By now:
 
-- __v8.0.18:__ Oracle Java Virtual Machine Server JDK 1.7.0-75, Apache Ant 1.9.4, Apache Tomcat 8.0.18, and Apache Portable Runtime 1.5.1.
+- __v2.6.2:__ Oracle Java Virtual Machine Server JDK 1.7.0-75, Apache Tomcat 8.0.18, Apache Portable Runtime 1.5.1, and GeoServer 2.6.2.
+
 
 Usage Pattern
 -------------
 Build the image directly from GitHub (this can take a while):
 
 ```Shell
-docker build -t="geographica/apache-tomcat:v8.0.18" https://github.com/GeographicaGS/Docker-Apache-Tomcat.git
+docker build -t="geographica/geoserver:v2.6.2" https://github.com/GeographicaGS/Docker-GeoServer.git
 ```
 
 or pull it from Docker Hub:
 
 ```Shell
-docker pull geographica/apache-tomcat
+docker pull geographica/geoserver:v2.6.2
 ```
 
 To start the container interactively:
 
 ```Shell
-docker run -ti -p 8080:8080 --name whatever geographica/apache-tomcat:v8.0.18 /bin/bash
+docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 --name whatever geographica/geoserver:v2.6.2 /bin/bash
 ```
-
-in case memory needs to be increased for the JVM, for example. Apache Tomcat environment is detailed in _bin/setenv.sh_.
 
 To start Tomcat directly:
 
 ```Shell
-docker run -ti -p 8080:8080 --name whatever geographica/apache-tomcat:v8.0.18
+docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 --name whatever geographica/geoserver:v2.6.2
 ```
 
 Tomcat's output can be seen and it can be closed with CTRL-C.
 
-TODO
-----
-Create another Docker with the JVM installed separately, and with JMX installed.
+Several environmental variables are exposed to control such things as ports, JVM memory parameters, and JMX activation. For example, to tweak memory usage limits for the JVM:
 
-Externalize the webapps folder to a volume on the host.
+```Shell
+docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -e "MEM=512m" -e "MMEM=512m" -e "PMEM=2048k" -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.6.2
+```
 
-
-
-
-
-docker run --rm -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -e "MEM=512m" -e "MMEM=512m" -e "PMEM=2048k" -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data test6:latest
-
-
-
-
-docker build -t="geographica/geoserver:v2.6.2
+GeoServer data folder is located by default at __/var/geoserver-data__ inside the container, although that can be changed via environmental variables too. Mount a volume to the host system as shown in the latter command.
