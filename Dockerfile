@@ -5,9 +5,20 @@ MAINTAINER Juan Pedro Perez "jp.alcantara@geographica.gs"
 
 # Environment
 ENV GEOSERVER_DATA_DIR /var/geoserver-data
-ENV MEM 512m
-ENV MMEM 512m
-ENV PMEM 2048k
+# To use JMX or not
+ENV JMX true
+# JMX port
+ENV JMX_PORT 3333
+ENV JMX_HOSTNAME localhost
+ENV JMX_CONF_FOLDER $CATALINA_HOME/conf
+# JMX access file
+ENV JMX_ACCESS_FILE $JMX_CONF_FOLDER/jmxremote.access
+# JMX password file
+ENV JMX_PASSWORD_FILE $JMX_CONF_FOLDER/jmxremote.password
+# Max heap size
+ENV MEM 64m
+# Initial heap size
+ENV MMEM 64m
 
 # Install JAI
 WORKDIR ${JRE_HOME}
