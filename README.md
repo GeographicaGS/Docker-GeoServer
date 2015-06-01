@@ -40,13 +40,13 @@ docker pull geographica/geoserver:v2.6.2
 To start the container interactively:
 
 ```Shell
-docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 --name whatever geographica/geoserver:v2.6.2 /bin/bash
+docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.6.2 /bin/bash
 ```
 
 To start Tomcat directly:
 
 ```Shell
-docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 --name whatever geographica/geoserver:v2.6.2
+docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.6.2
 ```
 
 Tomcat's output can be seen and it can be closed with CTRL-C.
@@ -54,7 +54,7 @@ Tomcat's output can be seen and it can be closed with CTRL-C.
 Several environmental variables are exposed to control such things as ports, JVM memory parameters, and JMX activation. For example, to tweak memory usage limits for the JVM:
 
 ```Shell
-docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -e "MEM=512m" -e "MMEM=512m" -e "PMEM=2048k" -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.6.2
+docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -e "MEM=512m" -e "MMEM=512m" -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.6.2
 ```
 
 GeoServer data folder is located by default at __/var/geoserver-data__ inside the container, although that can be changed via environmental variables too. Mount a volume to the host system as shown in the latter command.
