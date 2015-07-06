@@ -58,3 +58,11 @@ docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -e "MEM=512m" -e "MMEM=5
 ```
 
 GeoServer data folder is located by default at __/var/geoserver-data__ inside the container, although that can be changed via environmental variables too. Mount a volume to the host system as shown in the latter command.
+
+To enter into an existing container with a shell:
+
+```Shell
+docker start whateverthecontainername
+
+docker exec -ti whateverthecontainername /bin/bash
+```
