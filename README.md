@@ -37,6 +37,8 @@ or pull it from Docker Hub:
 docker pull geographica/geoserver:v2.6.2
 ```
 
+__Just a silly reminder to myself:__ there is no need to configure the Tomcat port inside the container, for the port mapping container-host will provide the final connecting port. Inside the container, Tomcat port will always be 8080, no need to change that.
+
 To start the container interactively:
 
 ```Shell
