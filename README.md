@@ -83,3 +83,9 @@ docker start whateverthecontainername
 
 docker exec -ti whateverthecontainername /bin/bash
 ```
+
+To check the log:
+
+```Shell
+docker exec -ti geoserver_test tail -f -n 50 /var/geoserver-data/logs/geoserver.log
+```
