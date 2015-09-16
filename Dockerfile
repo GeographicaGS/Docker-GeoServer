@@ -22,11 +22,11 @@ ENV JMX_ACCESS_FILE $JMX_CONF_FOLDER/jmxremote.access
 # JMX password file
 ENV JMX_PASSWORD_FILE $JMX_CONF_FOLDER/jmxremote.password
 # Max heap size
-ENV XMX 64m
+ENV XMX 1024m
 # Initial heap size
-ENV XMS 64m
+ENV XMS 1024m
 # PermSize size
-ENV MAXPERMSIZE 64m
+ENV MAXPERMSIZE 512m
 
 
 # Copy assets
@@ -41,6 +41,9 @@ ADD packages/compile.sh /usr/local/
 WORKDIR /usr/local/
 RUN chmod 777 compile.sh
 RUN ./compile.sh
+
+VOLUME /var/geoserver-data
+VOLUME /usr/local/apache-tomcat-8.0.18/logs
 
 EXPOSE 8080
 EXPOSE 3333

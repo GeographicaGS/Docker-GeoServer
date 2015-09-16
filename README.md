@@ -54,7 +54,7 @@ docker pull geographica/geoserver:v2.6.2
 
 __Just a silly reminder to myself:__ there is no need to configure the Tomcat port inside the container, for the port mapping container-host will provide the final connecting port. Inside the container, Tomcat port will always be 8080, no need to change that.
 
-To start the container interactively:
+To start the container interactively (usually with --rm, for debugging):
 
 ```Shell
 docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.6.2 /bin/bash
@@ -71,10 +71,16 @@ Tomcat's output can be seen and it can be closed with CTRL-C.
 Several environmental variables are exposed to control such things as ports, JVM memory parameters, and JMX activation. For example, to tweak memory usage limits for the JVM:
 
 ```Shell
-docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -e "JMX=false" -e "XMX=512m" -e "XMS=512m" -e "MAXPERMSIZE=1024k" -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.6.2
+docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -e "JMX=false" -e "XMX=512m" -e "XMS=512m" -e "MAXPERMSIZE=512m" -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.6.2
 ```
 
-GeoServer data folder is located by default at __/var/geoserver-data__ inside the container, although that can be changed via environmental variables too. Mount a volume to the host system as shown in the latter command.
+GeoServer data folder is located by default at __/var/geoserver-data__ inside the container, although that can be changed via environmental variables too. The volume is exposed, as well as __/usr/local/apache-tomcat-8.0.18/logs__ to access logs. A volume to the host system can be mounted as shown in the latter command.
+
+In normal conditions, run the container this way:
+
+```Shell
+docker run -d -P --name whatever geographica/geoserver:v2.6.2
+```
 
 To enter into an existing container with a shell:
 
@@ -84,7 +90,7 @@ docker start whateverthecontainername
 docker exec -ti whateverthecontainername /bin/bash
 ```
 
-To check the log:
+To check the log, either go to the volume or:
 
 ```Shell
 docker exec -ti geoserver_test tail -f -n 50 /var/geoserver-data/logs/geoserver.log
