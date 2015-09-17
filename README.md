@@ -95,3 +95,5 @@ To check the log, either go to the volume or:
 ```Shell
 docker exec -ti geoserver_test tail -f -n 50 /var/geoserver-data/logs/geoserver.log
 ```
+
+For more details, check [geographica/Docker-Apache-Tomcat](https://github.com/GeographicaGS/Docker-Apache-Tomcat).
