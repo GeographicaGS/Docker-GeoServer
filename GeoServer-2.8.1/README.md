@@ -39,13 +39,15 @@ Inside the container, Tomcat port will always be 8080, no need to change that.
 To start the container interactively (usually with --rm, for debugging):
 
 ```Shell
-docker run -ti -p 8080:8080 --rm -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.8.1 /bin/bash
+docker run -ti -p 8080:8080 --rm -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data \
+--name whatever geographica/geoserver:v2.8.1 /bin/bash
 ```
 
 To start Tomcat directly and check output, also for debugging:
 
 ```Shell
-docker run -ti -p 8080:8080 -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.8.1
+docker run -ti -p 8080:8080 -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data \
+--name whatever geographica/geoserver:v2.8.1
 ```
 
 Tomcat's output can be seen and it can be closed with CTRL-C.
@@ -53,7 +55,9 @@ Tomcat's output can be seen and it can be closed with CTRL-C.
 Several environmental variables are exposed to control such things as ports, JVM memory parameters, and JMX activation. For example, to tweak memory usage limits for the JVM:
 
 ```Shell
-docker run -ti -p 8080:8080 -e "XMX=1024m" -e "XMS=1024m" -e "MAXPERMSIZE=1024m" -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.8.1
+docker run -ti -p 8080:8080 -e "XMX=1024m" -e "XMS=1024m" -e "MAXPERMSIZE=1024m" \
+-v /home/malkab/Desktop/geoserver-data:/var/geoserver-data \
+--name whatever geographica/geoserver:v2.8.1
 ```
 
 GeoServer data folder is located by default at __/var/geoserver-data__ inside the container, although that can be changed via environmental variables too. The volume is exposed, as well as __/usr/local/apache-tomcat-8.0.18/logs__ to access logs. A volume to the host system can be mounted as shown in the latter command, but remember that this is considered a hack.
