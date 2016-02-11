@@ -93,6 +93,8 @@ After deployment, some configuration is needed. For example, enable GeoServer lo
 docker exec geoserver_test touch /var/geoserver-data/logs/geoserver.log
 ```
 
+Follow other GeoServer deployment normal procedures, like changing master password and such.
+
 
 Bundle Creation for New Versions
 --------------------------------
