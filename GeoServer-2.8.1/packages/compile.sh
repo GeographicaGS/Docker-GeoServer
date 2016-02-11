@@ -23,3 +23,5 @@ mkdir -p $GEOSERVER_DATA_DIR
 chown -R tomcat:tomcat $GEOSERVER_DATA_DIR
 rm -f /usr/local/bin/compile.sh
 
+# Change permissions for $CATALINA_HOME
+chown -R tomcat:tomcat $CATALINA_HOME

@@ -15,7 +15,7 @@ This Dockerfile deploys the following software:
 
 - native JAI and JAI ImageIO;
 
-- GeoServer 2.8.1, deployed in Tomcat from the war file.
+- GeoServer 2.8.1 bundled with the WPS extension, directly deployed in Tomcat (originally deployed from war file).
 
 
 Usage Pattern
@@ -23,7 +23,7 @@ Usage Pattern
 Build the image directly from GitHub (this can take a while):
 
 ```Shell
-git checkout tagbranch
+cd GeoServer-2.8.1
 
 docker build -t="geographica/geoserver:v2.8.1" .
 ```
@@ -34,18 +34,18 @@ or pull it from Docker Hub:
 docker pull geographica/geoserver:v2.8.1
 ```
 
-__Just a silly reminder to myself:__ there is no need to configure the Tomcat port inside the container, for the port mapping container-host will provide the final connecting port. Inside the container, Tomcat port will always be 8080, no need to change that.
+Inside the container, Tomcat port will always be 8080, no need to change that.
 
 To start the container interactively (usually with --rm, for debugging):
 
 ```Shell
-docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.8.1 /bin/bash
+docker run -ti -p 8080:8080 --rm -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.8.1 /bin/bash
 ```
 
-To start Tomcat directly:
+To start Tomcat directly and check output, also for debugging:
 
 ```Shell
-docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.8.1
+docker run -ti -p 8080:8080 -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.8.1
 ```
 
 Tomcat's output can be seen and it can be closed with CTRL-C.
@@ -53,10 +53,10 @@ Tomcat's output can be seen and it can be closed with CTRL-C.
 Several environmental variables are exposed to control such things as ports, JVM memory parameters, and JMX activation. For example, to tweak memory usage limits for the JVM:
 
 ```Shell
-docker run -ti -p 8080:8080 -p 3333:3333 -p 62911:62911 -e "JMX=false" -e "XMX=512m" -e "XMS=512m" -e "MAXPERMSIZE=512m" -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.8.1
+docker run -ti -p 8080:8080 -e "XMX=1024m" -e "XMS=1024m" -e "MAXPERMSIZE=1024m" -v /home/malkab/Desktop/geoserver-data:/var/geoserver-data --name whatever geographica/geoserver:v2.8.1
 ```
 
-GeoServer data folder is located by default at __/var/geoserver-data__ inside the container, although that can be changed via environmental variables too. The volume is exposed, as well as __/usr/local/apache-tomcat-8.0.18/logs__ to access logs. A volume to the host system can be mounted as shown in the latter command.
+GeoServer data folder is located by default at __/var/geoserver-data__ inside the container, although that can be changed via environmental variables too. The volume is exposed, as well as __/usr/local/apache-tomcat-8.0.18/logs__ to access logs. A volume to the host system can be mounted as shown in the latter command, but remember that this is considered a hack.
 
 In normal conditions, run the container this way:
 
@@ -79,3 +79,17 @@ docker exec -ti geoserver_test tail -f -n 50 /var/geoserver-data/logs/geoserver.
 ```
 
 For more details, check [geographica/Docker-Apache-Tomcat](https://github.com/GeographicaGS/Docker-Apache-Tomcat).
+
+
+Deployment
+----------
+After deployment, some configuration is needed. For example, enable GeoServer logs and create the log file:
+
+```Shell
+docker exec geoserver_test touch /var/geoserver-data/logs/geoserver.log
+```
+
+
+Bundle Creation for New Versions
+--------------------------------
+Due to lack of enough skill with Tomcat, a fully automatized deployment at container creation by extracting the war, installing plugins into _webapps/geoserver/WEB-INF/lib_, and restarting Tomcat couldn't be achieved. The file _packages/geoserver-2.8.1-bundle.tar.bz2_ was created by deploy the GeoServer WAR, installing on it the required plugins and taring the resulting __geoserver__ folder into the aforementioned file. This file is just simply expanded into _$CATALINA_HOME/webapps/_ and good to go, GeoServer+plugins available. Repeat this procedure in case a new plugin needs to be added to the default configuration.
